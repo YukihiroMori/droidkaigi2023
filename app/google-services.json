@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1059132481457",
+    "project_id": "droidkaigi2023-errorhandling",
+    "storage_bucket": "droidkaigi2023-errorhandling.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1059132481457:android:33f3a870fe4a95a0bc2790",
+        "android_client_info": {
+          "package_name": "com.yukihiro.droidkaigi2023"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1059132481457-mtkd12ck5s177fip335k794j5itih9so.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYkEKnbDl8I9ck2nja8Ke-V3KE6dW2BDM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1059132481457-mtkd12ck5s177fip335k794j5itih9so.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

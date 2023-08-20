@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">droidkaigi2023</string>
+
+    <string name="error_dialog_ok">OK</string>
+    <string name="error_dialog_cancel">Cancel</string>
+
+    <string name="error_dialog_matter_login">ログインに失敗しました。</string>
+    <string name="error_dialog_reason_offline">オフラインです。\n通信環境をご確認ください。</string>
+
+    <string name="error_snack_bar_message_offline">オフラインです。</string>
+    <string name="error_snack_bar_message_not_login">未ログインです。</string>
+</resources>
