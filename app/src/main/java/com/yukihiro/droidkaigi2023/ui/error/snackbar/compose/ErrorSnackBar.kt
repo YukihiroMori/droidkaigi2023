@@ -28,7 +28,7 @@ fun ErrorSnackBar(
             when (result) {
                 SnackbarResult.ActionPerformed -> {}
                 SnackbarResult.Dismissed -> {
-                    listener.onErrorSnackBarDismiss()
+                    listener.onErrorSnackBarDismiss(state)
                 }
             }
         }

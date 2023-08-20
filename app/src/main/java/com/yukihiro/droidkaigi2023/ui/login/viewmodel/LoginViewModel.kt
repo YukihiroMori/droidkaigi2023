@@ -4,13 +4,14 @@ package com.yukihiro.droidkaigi2023.ui.login.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yukihiro.droidkaigi2023.architecture.toSecret
-import com.yukihiro.droidkaigi2023.domain.repository.account.AccountRepository
 import com.yukihiro.droidkaigi2023.domain.usecase.login.LoginUseCase
 import com.yukihiro.droidkaigi2023.domain.usecase.login.LoginUseCaseResult
+import com.yukihiro.droidkaigi2023.infra.repository.exception.AccountException
 import com.yukihiro.droidkaigi2023.ui.common.navigation.Destination
-import com.yukihiro.droidkaigi2023.ui.error.compose.state.ErrorState
-import com.yukihiro.droidkaigi2023.ui.error.compose.state.NoError
+import com.yukihiro.droidkaigi2023.ui.error.ErrorStateHelper
 import com.yukihiro.droidkaigi2023.ui.error.dialog.state.ErrorDialogState
+import com.yukihiro.droidkaigi2023.ui.error.maintenance.state.MaintenanceState
+import com.yukihiro.droidkaigi2023.ui.error.snackbar.state.ErrorSnackBarState
 import com.yukihiro.droidkaigi2023.ui.maintenance.MaintenanceDestination
 import com.yukihiro.droidkaigi2023.ui.login.compose.listener.LoginListener
 import com.yukihiro.droidkaigi2023.ui.login.compose.state.LoginUiState
@@ -21,32 +22,26 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
+import okio.IOException
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase
 ) : ViewModel(), LoginListener {
-    private val errorHandler = LoginErrorHandler
+    val errorStateHelper = ErrorStateHelper(LoginErrorHandler)
 
     private val _loginUiStateFlow = MutableStateFlow(LoginUiState.default())
     val loginUiStateFlow: StateFlow<LoginUiState> = _loginUiStateFlow.asStateFlow()
 
-    private val _errorStateFlow = MutableStateFlow<ErrorState>(NoError)
-    val errorStateFlow: StateFlow<ErrorState> = _errorStateFlow.asStateFlow()
-
-    private val _navigateFlow= MutableSharedFlow<Destination>()
+    private val _navigateFlow = MutableSharedFlow<Destination>()
     val navigateFlow: SharedFlow<Destination> = _navigateFlow
 
-    private fun handleError(exception: Throwable) {
-        _errorStateFlow.update { errorHandler.handle(exception) }
-    }
-
-    fun onResume(){
-        //_errorStateFlow.update { MaintenanceState }
+    fun onResume() {
+        errorStateHelper.handleError(IOException())
+        errorStateHelper.handleError(AccountException.NotLoggedIn)
     }
 
     override fun onEditEmail(email: String) {
@@ -62,19 +57,19 @@ class LoginViewModel @Inject constructor(
     }
 
     override fun onClickErrorDialogConfirm(state: ErrorDialogState) {
-        _errorStateFlow.update { NoError }
+        errorStateHelper.consumeErrorState(state)
     }
 
     override fun onClickErrorDialogDismiss(state: ErrorDialogState) {
-        _errorStateFlow.update { NoError }
+        errorStateHelper.consumeErrorState(state)
     }
 
-    override fun onErrorSnackBarDismiss() {
-        _errorStateFlow.update { NoError }
+    override fun onErrorSnackBarDismiss(state: ErrorSnackBarState) {
+        errorStateHelper.consumeErrorState(state)
     }
 
-    override fun onNavigatedMaintenance() {
-        _errorStateFlow.update { NoError }
+    override fun onNavigatedMaintenance(state : MaintenanceState) {
+        errorStateHelper.consumeErrorState(state)
     }
 
     private fun login() {
@@ -86,21 +81,25 @@ class LoginViewModel @Inject constructor(
                 email.toSecret(),
                 password.toSecret()
             )
-            when(result){
+            when (result) {
                 is LoginUseCaseResult.Success -> {
                     _navigateFlow.emit(MaintenanceDestination)
                 }
+
                 is LoginUseCaseResult.Failure.NotRegistered -> {
                     _loginUiStateFlow.updateAndGet { it.copy(isNotFoundAccount = true) }
                 }
+
                 is LoginUseCaseResult.Failure.WrongPassword -> {
                     _loginUiStateFlow.updateAndGet { it.copy(isWrongPassword = true) }
                 }
+
                 is LoginUseCaseResult.Failure.ServerError -> {
 
                 }
+
                 is LoginUseCaseResult.Failure.Unexpected -> {
-                    handleError(result.exception)
+                    errorStateHelper.handleError(result.exception)
                 }
             }
         }

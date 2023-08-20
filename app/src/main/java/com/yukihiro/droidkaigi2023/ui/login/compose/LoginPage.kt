@@ -9,7 +9,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.yukihiro.droidkaigi2023.ui.common.navigation.LocalNavigationDispatcher
 import com.yukihiro.droidkaigi2023.ui.error.compose.ErrorSection
-import com.yukihiro.droidkaigi2023.ui.error.compose.state.NoError
 import com.yukihiro.droidkaigi2023.ui.login.viewmodel.LoginViewModel
 
 
@@ -18,7 +17,7 @@ fun LoginPage(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val loginUiState = viewModel.loginUiStateFlow.collectAsState()
-    val errorState = viewModel.errorStateFlow.collectAsState()
+    val errorState = viewModel.errorStateHelper.errorStateFlow.collectAsState()
 
     val dispatcher = LocalNavigationDispatcher.current
     val destination = viewModel.navigateFlow.collectAsState(initial = null)

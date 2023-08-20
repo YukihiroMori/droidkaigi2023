@@ -9,4 +9,5 @@
 
     <string name="error_snack_bar_message_offline">オフラインです。</string>
     <string name="error_snack_bar_message_not_login">未ログインです。</string>
+    <string name="error_snack_bar_message_unexpected">不明なエラーが起きました。</string>
 </resources>
