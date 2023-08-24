@@ -6,6 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import com.yukihiro.droidkaigi2023.ui.error.compose.state.ErrorState
 import com.yukihiro.droidkaigi2023.ui.error.dialog.listener.ErrorDialogListener
 import com.yukihiro.droidkaigi2023.ui.error.dialog.state.ErrorDialogState
 import com.yukihiro.droidkaigi2023.ui.theme.Typography
@@ -21,7 +22,7 @@ fun ErrorDialog(state: ErrorDialogState, listener: ErrorDialogListener) {
         },
         text = {
             Text(
-                text = stringResource(state.reason),
+                text = stringResource(id = state.reason),
                 style = MaterialTheme.typography.bodyMedium
             )
         },

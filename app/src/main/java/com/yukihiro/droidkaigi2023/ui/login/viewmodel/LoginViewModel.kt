@@ -3,14 +3,16 @@ package com.yukihiro.droidkaigi2023.ui.login.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.yukihiro.droidkaigi2023.R
 import com.yukihiro.droidkaigi2023.architecture.toSecret
 import com.yukihiro.droidkaigi2023.domain.usecase.login.LoginUseCase
 import com.yukihiro.droidkaigi2023.domain.usecase.login.LoginUseCaseResult
-import com.yukihiro.droidkaigi2023.infra.repository.exception.AccountException
+import com.yukihiro.droidkaigi2023.domain.repository.account.exception.AccountException
 import com.yukihiro.droidkaigi2023.ui.common.navigation.Destination
 import com.yukihiro.droidkaigi2023.ui.error.ErrorStateHelper
 import com.yukihiro.droidkaigi2023.ui.error.dialog.state.ErrorDialogState
-import com.yukihiro.droidkaigi2023.ui.error.maintenance.state.MaintenanceState
+import com.yukihiro.droidkaigi2023.ui.error.maintenance.compose.state.MaintenanceState
 import com.yukihiro.droidkaigi2023.ui.error.snackbar.state.ErrorSnackBarState
 import com.yukihiro.droidkaigi2023.ui.maintenance.MaintenanceDestination
 import com.yukihiro.droidkaigi2023.ui.login.compose.listener.LoginListener
@@ -31,7 +33,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase
 ) : ViewModel(), LoginListener {
-    val errorStateHelper = ErrorStateHelper(LoginErrorHandler)
+    val errorStateHelper = ErrorStateHelper(LoginErrorHandler,this)
 
     private val _loginUiStateFlow = MutableStateFlow(LoginUiState.default())
     val loginUiStateFlow: StateFlow<LoginUiState> = _loginUiStateFlow.asStateFlow()
@@ -40,8 +42,6 @@ class LoginViewModel @Inject constructor(
     val navigateFlow: SharedFlow<Destination> = _navigateFlow
 
     fun onResume() {
-        errorStateHelper.handleError(IOException())
-        errorStateHelper.handleError(AccountException.NotLoggedIn)
     }
 
     override fun onEditEmail(email: String) {
@@ -57,19 +57,15 @@ class LoginViewModel @Inject constructor(
     }
 
     override fun onClickErrorDialogConfirm(state: ErrorDialogState) {
-        errorStateHelper.consumeErrorState(state)
     }
 
     override fun onClickErrorDialogDismiss(state: ErrorDialogState) {
-        errorStateHelper.consumeErrorState(state)
     }
 
     override fun onErrorSnackBarDismiss(state: ErrorSnackBarState) {
-        errorStateHelper.consumeErrorState(state)
     }
 
     override fun onNavigatedMaintenance(state : MaintenanceState) {
-        errorStateHelper.consumeErrorState(state)
     }
 
     private fun login() {
@@ -86,20 +82,18 @@ class LoginViewModel @Inject constructor(
                     _navigateFlow.emit(MaintenanceDestination)
                 }
 
-                is LoginUseCaseResult.Failure.NotRegistered -> {
-                    _loginUiStateFlow.updateAndGet { it.copy(isNotFoundAccount = true) }
-                }
-
-                is LoginUseCaseResult.Failure.WrongPassword -> {
-                    _loginUiStateFlow.updateAndGet { it.copy(isWrongPassword = true) }
-                }
-
-                is LoginUseCaseResult.Failure.ServerError -> {
-
-                }
-
-                is LoginUseCaseResult.Failure.Unexpected -> {
-                    errorStateHelper.handleError(result.exception)
+                is LoginUseCaseResult.Failure -> {
+                    when(result.exception){
+                        is AccountException.NotRegistered ->
+                            _loginUiStateFlow.updateAndGet { it.copy(isNotFoundAccount = true) }
+                        is AccountException.WrongPassword ->
+                            _loginUiStateFlow.updateAndGet { it.copy(isWrongPassword = true) }
+                        else ->
+                            errorStateHelper.handleError(
+                                R.string.error_dialog_matter_login,
+                                result.exception
+                            )
+                    }
                 }
             }
         }

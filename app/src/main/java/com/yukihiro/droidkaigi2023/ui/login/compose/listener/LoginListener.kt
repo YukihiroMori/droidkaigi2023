@@ -1,7 +1,7 @@
 package com.yukihiro.droidkaigi2023.ui.login.compose.listener
 
 
-import com.yukihiro.droidkaigi2023.ui.error.compose.listener.ErrorListener
+import com.yukihiro.droidkaigi2023.ui.error.ErrorListener
 
 interface LoginListener: ErrorListener {
     fun onEditEmail(email: String)

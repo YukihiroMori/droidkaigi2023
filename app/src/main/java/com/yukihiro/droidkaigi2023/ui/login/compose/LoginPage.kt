@@ -37,6 +37,6 @@ fun LoginPage(
 
     ErrorSection(
         state = errorState.value,
-        listener = viewModel,
+        listener = viewModel.errorStateHelper
     )
 }

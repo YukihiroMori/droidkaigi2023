@@ -28,13 +28,23 @@ fun MaintenancePage() {
     ) {
         val dispatcher = LocalNavigationDispatcher.current
         Text(
-            "メンテナンス中です。",
-            style = MaterialTheme.typography.bodyLarge
+            "ただいまメンテナンス中です。",
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            "ご利用の皆様にはご迷惑をおかけし、申し訳ございません。",
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        Text(
+            "メンテナンス終了までしばらくお待ちください。",
+            style = MaterialTheme.typography.bodyMedium,
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
-                dispatcher.navigate(LoginDestination)
+                dispatcher.popBackStack(LoginDestination)
             }
         ) {
             Text(

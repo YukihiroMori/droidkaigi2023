@@ -1,6 +1,6 @@
-package com.yukihiro.droidkaigi2023.infra.repository.exception
+package com.yukihiro.droidkaigi2023.domain.repository.account.exception
 
-import com.yukihiro.droidkaigi2023.infra.exception.DomainException
+import com.yukihiro.droidkaigi2023.domain.exception.DomainException
 
 sealed class AccountException: DomainException() {
     object NotLoggedIn: AccountException()
@@ -10,6 +10,4 @@ sealed class AccountException: DomainException() {
     object WrongPassword: AccountException()
 
     object ServerError: AccountException()
-
-    class Unexpected(val origin: Throwable) : AccountException()
 }

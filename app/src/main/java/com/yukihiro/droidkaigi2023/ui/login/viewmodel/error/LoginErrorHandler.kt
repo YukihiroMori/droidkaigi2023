@@ -1,17 +1,22 @@
 package com.yukihiro.droidkaigi2023.ui.login.viewmodel.error
 
-import com.yukihiro.droidkaigi2023.infra.repository.exception.AccountException
+import androidx.annotation.StringRes
+import com.yukihiro.droidkaigi2023.domain.repository.account.exception.AccountException
 import com.yukihiro.droidkaigi2023.ui.error.ErrorHandler
 import com.yukihiro.droidkaigi2023.ui.error.compose.state.ErrorState
+import com.yukihiro.droidkaigi2023.ui.error.dialog.ErrorDialogStatesCreator
+import com.yukihiro.droidkaigi2023.ui.error.maintenance.compose.state.MaintenanceState
 import com.yukihiro.droidkaigi2023.ui.error.snackbar.ErrorSnackBarStates
 import java.io.IOException
 
 object LoginErrorHandler : ErrorHandler {
 
-    override fun handle(exception: Throwable): ErrorState {
+    override fun handle(
+        @StringRes matter: Int,
+        exception: Throwable
+    ): ErrorState {
         return when(exception) {
-            is IOException -> ErrorSnackBarStates.Offline
-            is AccountException -> ErrorSnackBarStates.NotLogin
+            is IOException -> ErrorDialogStatesCreator.createOffline(matter)
             else -> ErrorSnackBarStates.Unexpected
         }
     }

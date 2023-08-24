@@ -8,16 +8,8 @@ import kotlinx.coroutines.flow.Flow
 interface AccountRepository {
     fun currentAccount(): Flow<Account?>
 
-    suspend fun findByEmail(email: Secret<String>): Account?
-
     suspend fun login(
         email: Secret<String>,
         password: Secret<String>
-    )
-
-    suspend fun register(account: Account)
-
-    suspend fun update(account: Account)
-
-    suspend fun delete(accountId: AccountId)
+    ): Account
 }

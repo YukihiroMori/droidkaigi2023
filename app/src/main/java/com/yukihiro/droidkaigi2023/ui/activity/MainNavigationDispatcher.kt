@@ -8,4 +8,12 @@ class MainNavigationDispatcher(private val navController: NavController): Naviga
     override fun navigate(destination: Destination) {
         navController.navigate(destination.route)
     }
+
+    override fun popBackStack(destination: Destination?) {
+        if(destination != null){
+            navController.popBackStack(destination.route, false)
+        } else {
+            navController.popBackStack()
+        }
+    }
 }
