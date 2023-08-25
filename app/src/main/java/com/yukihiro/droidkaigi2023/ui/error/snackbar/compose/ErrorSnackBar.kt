@@ -6,7 +6,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import com.yukihiro.droidkaigi2023.ui.common.LocalSnackBarHostState
-import com.yukihiro.droidkaigi2023.ui.error.compose.state.ErrorState
 import com.yukihiro.droidkaigi2023.ui.error.snackbar.listener.ErrorSnackBarListener
 import com.yukihiro.droidkaigi2023.ui.error.snackbar.state.ErrorSnackBarState
 import kotlinx.coroutines.launch
@@ -16,19 +15,16 @@ fun ErrorSnackBar(
     state: ErrorSnackBarState,
     listener: ErrorSnackBarListener
 ) {
-    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val hostState = LocalSnackBarHostState.current
 
     LaunchedEffect(hostState, state) {
-        scope.launch {
-            val result = hostState.showSnackbar(
-                message = context.getString(state.message),
-                duration = state.duration
-            )
-            if(result == SnackbarResult.Dismissed) {
-                listener.onErrorSnackBarDismiss(state)
-            }
+        val result = hostState.showSnackbar(
+            message = context.getString(state.message),
+            duration = state.duration
+        )
+        if(result == SnackbarResult.Dismissed) {
+            listener.onErrorSnackBarDismiss(state)
         }
     }
 }

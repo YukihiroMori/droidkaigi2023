@@ -17,7 +17,7 @@ fun ErrorSection(
     state: ErrorSectionState,
     listener: ErrorSectionListener
 ) {
-    state.errorList.forEach {error ->
+    state.errorSet.forEach {error ->
         when (error) {
             is ErrorDialogState -> ErrorDialog(
                 state = error,

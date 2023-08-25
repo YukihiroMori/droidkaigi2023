@@ -2,6 +2,7 @@ package com.yukihiro.droidkaigi2023.ui.error.snackbar
 
 import com.yukihiro.droidkaigi2023.R
 import com.yukihiro.droidkaigi2023.domain.usecase.login.LoginUseCaseResult
+import com.yukihiro.droidkaigi2023.ui.error.compose.state.ErrorState
 import com.yukihiro.droidkaigi2023.ui.error.snackbar.state.ErrorSnackBarState
 
 object ErrorSnackBarStates {

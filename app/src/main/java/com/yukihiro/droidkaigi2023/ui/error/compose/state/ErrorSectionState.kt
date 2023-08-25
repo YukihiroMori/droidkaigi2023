@@ -1,9 +1,9 @@
 package com.yukihiro.droidkaigi2023.ui.error.compose.state
 
 data class ErrorSectionState(
-    val errorList: List<ErrorState>
+    val errorSet: Set<ErrorState>
 ){
     companion object {
-        fun default() = ErrorSectionState(errorList = emptyList())
+        fun default() = ErrorSectionState(errorSet = emptySet())
     }
 }

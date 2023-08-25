@@ -16,7 +16,8 @@ object LoginErrorHandler : ErrorHandler {
         exception: Throwable
     ): ErrorState {
         return when(exception) {
-            is IOException -> ErrorDialogStatesCreator.createOffline(matter)
+            is AccountException -> ErrorSnackBarStates.NotLogin
+            is IOException -> ErrorSnackBarStates.Offline
             else -> ErrorSnackBarStates.Unexpected
         }
     }

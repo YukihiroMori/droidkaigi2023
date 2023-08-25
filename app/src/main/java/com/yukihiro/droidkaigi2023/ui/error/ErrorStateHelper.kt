@@ -1,7 +1,6 @@
 package com.yukihiro.droidkaigi2023.ui.error
 
 import androidx.annotation.StringRes
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.yukihiro.droidkaigi2023.ui.error.compose.listener.ErrorSectionListener
 import com.yukihiro.droidkaigi2023.ui.error.compose.state.ErrorSectionState
 import com.yukihiro.droidkaigi2023.ui.error.compose.state.ErrorState
@@ -27,9 +26,7 @@ class ErrorStateHelper(
         val errorState = errorHandler.handle(matter, exception)
         _errorStateFlow.updateAndGet { state ->
             state.copy(
-                errorList = state.errorList.toMutableList().also {
-                    it.add(errorState)
-                }.distinct()
+                errorSet = state.errorSet.plus(errorState)
             )
         }
     }
@@ -57,8 +54,7 @@ class ErrorStateHelper(
     private fun <T : ErrorState> consumeErrorState(state: T) {
         _errorStateFlow.updateAndGet { errorState ->
             errorState.copy(
-                errorList = errorState.errorList
-                    .filter { it != state as ErrorState }
+                errorSet = errorState.errorSet.minus(state)
             )
         }
     }

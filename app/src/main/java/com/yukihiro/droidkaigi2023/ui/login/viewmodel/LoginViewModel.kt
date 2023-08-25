@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
 import okio.IOException
+import java.lang.IllegalStateException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,6 +43,30 @@ class LoginViewModel @Inject constructor(
     val navigateFlow: SharedFlow<Destination> = _navigateFlow
 
     fun onResume() {
+        errorStateHelper.handleError(
+            R.string.error_dialog_matter_login,
+            IOException()
+        )
+        errorStateHelper.handleError(
+            R.string.error_dialog_matter_login,
+            IOException()
+        )
+        errorStateHelper.handleError(
+            R.string.error_dialog_matter_login,
+            AccountException.WrongPassword
+        )
+        errorStateHelper.handleError(
+            R.string.error_dialog_matter_login,
+            IOException()
+        )
+        errorStateHelper.handleError(
+            R.string.error_dialog_matter_login,
+            AccountException.WrongPassword
+        )
+        errorStateHelper.handleError(
+            R.string.error_dialog_matter_login,
+            IllegalStateException()
+        )
     }
 
     override fun onEditEmail(email: String) {
