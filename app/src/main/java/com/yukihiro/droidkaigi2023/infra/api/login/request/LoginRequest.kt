@@ -1,4 +1,4 @@
-package com.yukihiro.droidkaigi2023.infra.api.request
+package com.yukihiro.droidkaigi2023.infra.api.login.request
 
 import kotlinx.serialization.Serializable
 

@@ -10,21 +10,22 @@ import com.yukihiro.droidkaigi2023.ui.error.snackbar.listener.ErrorSnackBarListe
 import com.yukihiro.droidkaigi2023.ui.error.snackbar.state.ErrorSnackBarState
 import kotlinx.coroutines.launch
 
-@Composable
-fun ErrorSnackBar(
-    state: ErrorSnackBarState,
-    listener: ErrorSnackBarListener
-) {
-    val context = LocalContext.current
-    val hostState = LocalSnackBarHostState.current
+    @Composable
+    fun ErrorSnackBar(
+        state: ErrorSnackBarState,
+        listener: ErrorSnackBarListener
+    ) {
+        val context = LocalContext.current
+        val hostState = LocalSnackBarHostState.current
 
-    LaunchedEffect(hostState, state) {
-        val result = hostState.showSnackbar(
-            message = context.getString(state.message),
-            duration = state.duration
-        )
-        if(result == SnackbarResult.Dismissed) {
-            listener.onErrorSnackBarDismiss(state)
+        LaunchedEffect(hostState, state) {
+            val result = hostState.showSnackbar(
+                message = context.getString(state.message),
+                duration = state.duration
+            )
+            if(result == SnackbarResult.Dismissed) {
+                listener.onErrorSnackBarDismiss(state)
+            }
         }
     }
-}
+

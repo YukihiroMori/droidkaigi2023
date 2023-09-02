@@ -1,8 +1,7 @@
-package com.yukihiro.droidkaigi2023.domain.repository.account.exception
-
-import com.yukihiro.droidkaigi2023.domain.exception.DomainException
+package com.yukihiro.droidkaigi2023.domain.exception
 
 sealed class AccountException: DomainException() {
+
     object NotLoggedIn: AccountException()
 
     object NotRegistered: AccountException()

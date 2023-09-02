@@ -1,4 +1,4 @@
-package com.yukihiro.droidkaigi2023.infra.api.response
+package com.yukihiro.droidkaigi2023.infra.api.login.response
 
 import kotlinx.serialization.Serializable
 
@@ -9,7 +9,13 @@ data class LoginResponse(
 ){
     @Serializable
     data class Data(
-        val account: Account
+        val accessToken: AccessToken,
+        val account: Account,
+    )
+
+    @Serializable
+    data class AccessToken(
+        val value: String,
     )
 
     @Serializable

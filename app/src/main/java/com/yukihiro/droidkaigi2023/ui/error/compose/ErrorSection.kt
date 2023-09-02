@@ -12,27 +12,22 @@ import com.yukihiro.droidkaigi2023.ui.error.maintenance.compose.state.Maintenanc
 import com.yukihiro.droidkaigi2023.ui.error.snackbar.compose.ErrorSnackBar
 import com.yukihiro.droidkaigi2023.ui.error.snackbar.state.ErrorSnackBarState
 
-@Composable
-fun ErrorSection(
-    state: ErrorSectionState,
-    listener: ErrorSectionListener
-) {
-    state.errorSet.forEach {error ->
-        when (error) {
-            is ErrorDialogState -> ErrorDialog(
-                state = error,
-                listener = listener
-            )
+    @Composable
+    fun ErrorSection(
+        state: ErrorSectionState,
+        listener: ErrorSectionListener
+    ) {
+        state.errorSet.forEach {error ->
+            when (error) {
+                is ErrorDialogState -> ErrorDialog(
+                    state = error,
+                    listener = listener
+                )
 
-            is ErrorSnackBarState -> ErrorSnackBar(
-                state = error,
-                listener = listener
-            )
-
-            is MaintenanceState -> Maintenance(
-                state = error,
-                listener = listener
-            )
+                is ErrorSnackBarState -> ErrorSnackBar(
+                    state = error,
+                    listener = listener
+                )
+            }
         }
     }
-}

@@ -11,4 +11,10 @@ object ErrorDialogStatesCreator {
             matter = matter,
             reason = R.string.error_dialog_reason_offline
         )
+
+    fun createLoadFail(@StringRes matter: Int): ErrorDialogState =
+        ErrorDialogState(
+            matter = matter,
+            reason = R.string.error_dialog_reason_load_fail
+        )
 }

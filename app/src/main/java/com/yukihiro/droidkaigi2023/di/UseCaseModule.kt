@@ -1,6 +1,8 @@
 package com.yukihiro.droidkaigi2023.di
 
+import com.yukihiro.droidkaigi2023.domain.usecase.itemlist.FetchItemListUseCase
 import com.yukihiro.droidkaigi2023.domain.usecase.login.LoginUseCase
+import com.yukihiro.droidkaigi2023.infra.usecase.FetchItemListUseCaseImpl
 import com.yukihiro.droidkaigi2023.infra.usecase.LoginUseCaseImpl
 import dagger.Binds
 import dagger.Module
@@ -14,4 +16,7 @@ interface UseCaseModule {
 
     @Binds
     fun loginUseCase(loginUseCaseImpl: LoginUseCaseImpl): LoginUseCase
+
+    @Binds
+    fun fetchItemListUseCase(fetchItemListUseCaseImpl: FetchItemListUseCaseImpl): FetchItemListUseCase
 }

@@ -17,7 +17,7 @@ fun LoginPage(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val loginUiState = viewModel.loginUiStateFlow.collectAsState()
-    val errorState = viewModel.errorStateHelper.errorStateFlow.collectAsState()
+    val errorSectionState = viewModel.errorStateHelper.errorSectionStateFlow.collectAsState()
 
     val dispatcher = LocalNavigationDispatcher.current
     val destination = viewModel.navigateFlow.collectAsState(initial = null)
@@ -36,7 +36,7 @@ fun LoginPage(
     )
 
     ErrorSection(
-        state = errorState.value,
+        state = errorSectionState.value,
         listener = viewModel.errorStateHelper
     )
 }

@@ -21,8 +21,8 @@ import com.yukihiro.droidkaigi2023.ui.common.LocalSnackBarHostState
 import com.yukihiro.droidkaigi2023.ui.common.navigation.LocalNavigationDispatcher
 import com.yukihiro.droidkaigi2023.ui.maintenance.MaintenanceDestination
 import com.yukihiro.droidkaigi2023.ui.maintenance.MaintenancePage
-import com.yukihiro.droidkaigi2023.ui.second.compose.SecondPage
-import com.yukihiro.droidkaigi2023.ui.second.compose.SecondPageDestination
+import com.yukihiro.droidkaigi2023.ui.itemlist.compose.ItemListPage
+import com.yukihiro.droidkaigi2023.ui.itemlist.compose.ItemListPageDestination
 import com.yukihiro.droidkaigi2023.ui.theme.Droidkaigi2023Theme
 import com.yukihiro.droidkaigi2023.ui.login.compose.LoginDestination
 import com.yukihiro.droidkaigi2023.ui.login.compose.LoginPage
@@ -66,8 +66,8 @@ fun MainScreen() {
                                     LoginPage()
                                 }
 
-                                composable(route = SecondPageDestination.route) {
-                                    SecondPage()
+                                composable(route = ItemListPageDestination.route) {
+                                    ItemListPage()
                                 }
 
                                 composable(route = MaintenanceDestination.route) {

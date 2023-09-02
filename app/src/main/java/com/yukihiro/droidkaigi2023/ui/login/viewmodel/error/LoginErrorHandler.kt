@@ -1,13 +1,10 @@
 package com.yukihiro.droidkaigi2023.ui.login.viewmodel.error
 
 import androidx.annotation.StringRes
-import com.yukihiro.droidkaigi2023.domain.repository.account.exception.AccountException
 import com.yukihiro.droidkaigi2023.ui.error.ErrorHandler
 import com.yukihiro.droidkaigi2023.ui.error.compose.state.ErrorState
-import com.yukihiro.droidkaigi2023.ui.error.dialog.ErrorDialogStatesCreator
-import com.yukihiro.droidkaigi2023.ui.error.maintenance.compose.state.MaintenanceState
 import com.yukihiro.droidkaigi2023.ui.error.snackbar.ErrorSnackBarStates
-import java.io.IOException
+import java.net.SocketException
 
 object LoginErrorHandler : ErrorHandler {
 
@@ -16,8 +13,7 @@ object LoginErrorHandler : ErrorHandler {
         exception: Throwable
     ): ErrorState {
         return when(exception) {
-            is AccountException -> ErrorSnackBarStates.NotLogin
-            is IOException -> ErrorSnackBarStates.Offline
+            is SocketException -> ErrorSnackBarStates.Offline
             else -> ErrorSnackBarStates.Unexpected
         }
     }

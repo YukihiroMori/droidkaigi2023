@@ -5,7 +5,7 @@ import com.yukihiro.droidkaigi2023.domain.model.Account
 import com.yukihiro.droidkaigi2023.domain.model.AccountId
 import com.yukihiro.droidkaigi2023.domain.model.User
 import com.yukihiro.droidkaigi2023.domain.model.UserId
-import com.yukihiro.droidkaigi2023.infra.api.response.LoginResponse
+import com.yukihiro.droidkaigi2023.infra.api.login.response.LoginResponse
 
 object AccountMapper {
     fun toModel(response: LoginResponse.Account): Account = Account(

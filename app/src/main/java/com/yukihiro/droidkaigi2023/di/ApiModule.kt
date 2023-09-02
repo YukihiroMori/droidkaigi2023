@@ -1,7 +1,8 @@
 package com.yukihiro.droidkaigi2023.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.yukihiro.droidkaigi2023.infra.api.LoginApi
+import com.yukihiro.droidkaigi2023.infra.api.item.ItemListApi
+import com.yukihiro.droidkaigi2023.infra.api.login.LoginApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,7 +45,13 @@ object ApiModule {
     @Provides
     fun provideLoginApi(
         retrofit: Retrofit
-    ):LoginApi = retrofit.create(LoginApi::class.java)
+    ): LoginApi = retrofit.create(LoginApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideItemListApi(
+        retrofit: Retrofit
+    ): ItemListApi = retrofit.create(ItemListApi::class.java)
 
     private const val BASE_URL = "http://10.0.2.2:80/"
 }

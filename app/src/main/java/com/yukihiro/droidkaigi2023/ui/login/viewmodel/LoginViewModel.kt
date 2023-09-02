@@ -3,12 +3,11 @@ package com.yukihiro.droidkaigi2023.ui.login.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.yukihiro.droidkaigi2023.R
 import com.yukihiro.droidkaigi2023.architecture.toSecret
 import com.yukihiro.droidkaigi2023.domain.usecase.login.LoginUseCase
 import com.yukihiro.droidkaigi2023.domain.usecase.login.LoginUseCaseResult
-import com.yukihiro.droidkaigi2023.domain.repository.account.exception.AccountException
+import com.yukihiro.droidkaigi2023.domain.exception.AccountException
 import com.yukihiro.droidkaigi2023.ui.common.navigation.Destination
 import com.yukihiro.droidkaigi2023.ui.error.ErrorStateHelper
 import com.yukihiro.droidkaigi2023.ui.error.dialog.state.ErrorDialogState

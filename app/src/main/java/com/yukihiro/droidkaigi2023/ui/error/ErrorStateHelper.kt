@@ -12,50 +12,45 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.updateAndGet
 
-class ErrorStateHelper(
-    private val errorHandler: ErrorHandler,
-    private val errorListener: ErrorListener?,
-): ErrorSectionListener {
-    private val _errorStateFlow = MutableStateFlow(ErrorSectionState.default())
-    val errorStateFlow: StateFlow<ErrorSectionState> = _errorStateFlow.asStateFlow()
+    class ErrorStateHelper(
+        private val errorHandler: ErrorHandler,
+        private val errorListener: ErrorListener?,
+    ): ErrorSectionListener {
+        private val _errorSectionStateFlow = MutableStateFlow(ErrorSectionState.default())
+        val errorSectionStateFlow: StateFlow<ErrorSectionState> = _errorSectionStateFlow.asStateFlow()
 
-    fun handleError(
-        @StringRes matter: Int,
-        exception: Throwable
-    ) {
-        val errorState = errorHandler.handle(matter, exception)
-        _errorStateFlow.updateAndGet { state ->
-            state.copy(
-                errorSet = state.errorSet.plus(errorState)
-            )
+        fun handleError(
+            @StringRes matter: Int,
+            exception: Throwable
+        ) {
+            val errorState = errorHandler.handle(matter, exception)
+            _errorSectionStateFlow.updateAndGet { state ->
+                state.copy(
+                    errorSet = state.errorSet.plus(errorState)
+                )
+            }
+        }
+
+        private fun <T : ErrorState> consumeErrorState(state: T) {
+            _errorSectionStateFlow.updateAndGet { errorState ->
+                errorState.copy(
+                    errorSet = errorState.errorSet.minus(state)
+                )
+            }
+        }
+
+        override fun onClickErrorDialogConfirm(state: ErrorDialogState) {
+            errorListener?.onClickErrorDialogConfirm(state)
+            consumeErrorState(state)
+        }
+
+        override fun onClickErrorDialogDismiss(state: ErrorDialogState) {
+            errorListener?.onClickErrorDialogDismiss(state)
+            consumeErrorState(state)
+        }
+
+        override fun onErrorSnackBarDismiss(state: ErrorSnackBarState) {
+            errorListener?.onErrorSnackBarDismiss(state)
+            consumeErrorState(state)
         }
     }
-
-    override fun onClickErrorDialogConfirm(state: ErrorDialogState) {
-        errorListener?.onClickErrorDialogConfirm(state)
-        consumeErrorState(state)
-    }
-
-    override fun onClickErrorDialogDismiss(state: ErrorDialogState) {
-        errorListener?.onClickErrorDialogDismiss(state)
-        consumeErrorState(state)
-    }
-
-    override fun onErrorSnackBarDismiss(state: ErrorSnackBarState) {
-        errorListener?.onErrorSnackBarDismiss(state)
-        consumeErrorState(state)
-    }
-
-    override fun onNavigatedMaintenance(state: MaintenanceState) {
-        errorListener?.onNavigatedMaintenance(state)
-        consumeErrorState(state)
-    }
-
-    private fun <T : ErrorState> consumeErrorState(state: T) {
-        _errorStateFlow.updateAndGet { errorState ->
-            errorState.copy(
-                errorSet = errorState.errorSet.minus(state)
-            )
-        }
-    }
-}
