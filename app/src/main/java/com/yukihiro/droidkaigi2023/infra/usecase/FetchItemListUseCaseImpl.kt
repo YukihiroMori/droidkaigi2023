@@ -6,6 +6,9 @@ import com.yukihiro.droidkaigi2023.domain.repository.AccountRepository
 import com.yukihiro.droidkaigi2023.domain.repository.ItemRepository
 import com.yukihiro.droidkaigi2023.domain.usecase.itemlist.FetchItemListUseCase
 import com.yukihiro.droidkaigi2023.domain.usecase.itemlist.FetchItemListUseCaseResult
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class FetchItemListUseCaseImpl@Inject constructor(
@@ -16,18 +19,19 @@ class FetchItemListUseCaseImpl@Inject constructor(
 ): FetchItemListUseCase {
 
     override suspend fun invoke(): FetchItemListUseCaseResult =
-        runCatching {
-            val account = accountRepository.getCurrentAccount()
-            val token = accessTokenRepository.getToken()
-            itemRepository.fetchItemList(
-                token = token,
-                account = account
+            runCatching {
+                val account = accountRepository.getCurrentAccount()
+                val token = accessTokenRepository.getToken()
+                itemRepository.clearItem(account)
+                itemRepository.fetchItemList(
+                    token = token,
+                    account = account
+                )
+            }.fold(
+                onSuccess = { FetchItemListUseCaseResult.Success },
+                onFailure = {
+                    crashlytics.recordException(it)
+                    FetchItemListUseCaseResult.Failure(it)
+                }
             )
-        }.fold(
-            onSuccess = { FetchItemListUseCaseResult.Success },
-            onFailure = {
-                crashlytics.recordException(it)
-                FetchItemListUseCaseResult.Failure(it)
-            }
-        )
 }

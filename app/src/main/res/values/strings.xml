@@ -3,15 +3,19 @@
 
     <string name="error_dialog_ok">OK</string>
     <string name="error_dialog_reload">再読み込み</string>
+    <string name="error_dialog_login">ログイン</string>
     <string name="error_dialog_cancel">Cancel</string>
 
     <string name="error_dialog_matter_login">ログインに失敗しました。</string>
-    <string name="error_dialog_reason_offline">オフラインです。\n通信環境をご確認ください。</string>
-
     <string name="error_dialog_matter_load_item">商品一覧の読み込みに失敗しました。</string>
+
+    <string name="error_dialog_reason_offline">オフラインです。\n通信環境をご確認ください。</string>
     <string name="error_dialog_reason_load_fail">情報を取得できませんでした。\n再読み込みをお試しください。</string>
+    <string name="error_dialog_reason_not_login">未ログインです。\n再ログインをしください。</string>
 
     <string name="error_snack_bar_message_offline">オフラインです。</string>
     <string name="error_snack_bar_message_not_login">未ログインです。</string>
+    <string name="error_snack_bar_message_server_error">サーバエラーが発生しました。</string>
     <string name="error_snack_bar_message_unexpected">不明なエラーが起きました。</string>
+    <string name="error_snack_bar_message_load_fail">商品一覧の読み込みに失敗しました。</string>
 </resources>

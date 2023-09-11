@@ -1,4 +1,4 @@
-package com.yukihiro.droidkaigi2023.architecture
+package com.yukihiro.droidkaigi2023.domain.architecture
 
 import kotlinx.serialization.Serializable
 

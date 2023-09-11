@@ -1,6 +1,6 @@
 package com.yukihiro.droidkaigi2023.domain.model
 
-import com.yukihiro.droidkaigi2023.architecture.Entity
+import com.yukihiro.droidkaigi2023.domain.architecture.Entity
 import kotlinx.serialization.Serializable
 
 @Serializable

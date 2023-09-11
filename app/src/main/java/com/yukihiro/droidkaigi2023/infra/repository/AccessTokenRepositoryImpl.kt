@@ -8,15 +8,28 @@ import javax.inject.Inject
 
 class AccessTokenRepositoryImpl @Inject constructor(
     private val accessTokenCachePreferences: AccessTokenCachePreferences
-): AccessTokenRepository {
+) : AccessTokenRepository {
     override fun saveToken(token: AccessToken) {
-        accessTokenCachePreferences.save(token)
+        runCatching { accessTokenCachePreferences.save(token) }
+            .fold(
+                onSuccess = {  },
+                onFailure = { throw AccessTokenException.UnexpectedException(it) }
+            )
     }
 
     override fun getToken(): AccessToken =
-        accessTokenCachePreferences.get() ?: throw AccessTokenException.NotFoundToken
+        runCatching {
+            accessTokenCachePreferences.get()
+        }.fold(
+            onSuccess = { it ?: throw AccessTokenException.NotFoundToken },
+            onFailure = { throw AccessTokenException.UnexpectedException(it) }
+        )
 
-    override fun clearToken() {
-        accessTokenCachePreferences.clear()
-    }
+    override fun clearToken() =
+        runCatching {
+            accessTokenCachePreferences.clear()
+        }.fold(
+            onSuccess = {  },
+            onFailure = { throw AccessTokenException.UnexpectedException(it) }
+        )
 }

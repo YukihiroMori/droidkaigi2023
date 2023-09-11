@@ -32,9 +32,7 @@ fun ErrorDialog(state: ErrorDialogState, listener: ErrorDialogListener) {
         },
         confirmButton = {
             TextButton(
-                onClick = {
-                    listener.onClickErrorDialogConfirm(state)
-                }
+                onClick = { listener.onClickErrorDialogConfirm(state) }
             ) {
                 Text(
                     text = stringResource(state.confirmText),
@@ -45,9 +43,7 @@ fun ErrorDialog(state: ErrorDialogState, listener: ErrorDialogListener) {
         dismissButton = {
             if(!state.isEnableDismiss) return@AlertDialog
             TextButton(
-                onClick = {
-                    listener.onClickErrorDialogDismiss(state)
-                }
+                onClick = { listener.onClickErrorDialogDismiss(state) }
             ) {
                 Text(
                     text = stringResource(state.dismissText),

@@ -3,8 +3,7 @@ package com.yukihiro.droidkaigi2023.ui.login.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yukihiro.droidkaigi2023.R
-import com.yukihiro.droidkaigi2023.architecture.toSecret
+import com.yukihiro.droidkaigi2023.domain.architecture.toSecret
 import com.yukihiro.droidkaigi2023.domain.usecase.login.LoginUseCase
 import com.yukihiro.droidkaigi2023.domain.usecase.login.LoginUseCaseResult
 import com.yukihiro.droidkaigi2023.domain.exception.AccountException
@@ -13,7 +12,7 @@ import com.yukihiro.droidkaigi2023.ui.error.ErrorStateHelper
 import com.yukihiro.droidkaigi2023.ui.error.dialog.state.ErrorDialogState
 import com.yukihiro.droidkaigi2023.ui.error.maintenance.compose.state.MaintenanceState
 import com.yukihiro.droidkaigi2023.ui.error.snackbar.state.ErrorSnackBarState
-import com.yukihiro.droidkaigi2023.ui.maintenance.MaintenanceDestination
+import com.yukihiro.droidkaigi2023.ui.itemlist.compose.ItemListDestination
 import com.yukihiro.droidkaigi2023.ui.login.compose.listener.LoginListener
 import com.yukihiro.droidkaigi2023.ui.login.compose.state.LoginUiState
 import com.yukihiro.droidkaigi2023.ui.login.viewmodel.error.LoginErrorHandler
@@ -25,15 +24,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
-import okio.IOException
-import java.lang.IllegalStateException
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase
 ) : ViewModel(), LoginListener {
-    val errorStateHelper = ErrorStateHelper(LoginErrorHandler,this)
+    val errorStateHelper = ErrorStateHelper(LoginErrorHandler, this)
 
     private val _loginUiStateFlow = MutableStateFlow(LoginUiState.default())
     val loginUiStateFlow: StateFlow<LoginUiState> = _loginUiStateFlow.asStateFlow()
@@ -42,7 +39,7 @@ class LoginViewModel @Inject constructor(
     val navigateFlow: SharedFlow<Destination> = _navigateFlow
 
     fun onResume() {
-        errorStateHelper.handleError(
+        /*errorStateHelper.handleError(
             R.string.error_dialog_matter_login,
             IOException()
         )
@@ -65,7 +62,7 @@ class LoginViewModel @Inject constructor(
         errorStateHelper.handleError(
             R.string.error_dialog_matter_login,
             IllegalStateException()
-        )
+        )*/
     }
 
     override fun onEditEmail(email: String) {
@@ -89,7 +86,7 @@ class LoginViewModel @Inject constructor(
     override fun onErrorSnackBarDismiss(state: ErrorSnackBarState) {
     }
 
-    override fun onNavigatedMaintenance(state : MaintenanceState) {
+    override fun onNavigatedMaintenance(state: MaintenanceState) {
     }
 
     private fun login() {
@@ -97,26 +94,20 @@ class LoginViewModel @Inject constructor(
             val email = _loginUiStateFlow.value.email
             val password = _loginUiStateFlow.value.password
 
-            val result = loginUseCase(
-                email.toSecret(),
-                password.toSecret()
-            )
-            when (result) {
-                is LoginUseCaseResult.Success -> {
-                    _navigateFlow.emit(MaintenanceDestination)
-                }
+            when (val result = loginUseCase(email.toSecret(), password.toSecret())) {
+                is LoginUseCaseResult.Success -> { _navigateFlow.emit(ItemListDestination) }
 
                 is LoginUseCaseResult.Failure -> {
-                    when(result.exception){
+                    when (result.exception) {
                         is AccountException.NotRegistered ->
                             _loginUiStateFlow.updateAndGet { it.copy(isNotFoundAccount = true) }
+
                         is AccountException.WrongPassword ->
                             _loginUiStateFlow.updateAndGet { it.copy(isWrongPassword = true) }
-                        else ->
-                            errorStateHelper.handleError(
-                                R.string.error_dialog_matter_login,
-                                result.exception
-                            )
+
+                        else -> {
+                            errorStateHelper.handleException(result.exception)
+                        }
                     }
                 }
             }

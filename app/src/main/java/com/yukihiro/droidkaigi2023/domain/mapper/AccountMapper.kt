@@ -1,6 +1,5 @@
 package com.yukihiro.droidkaigi2023.domain.mapper
 
-import com.yukihiro.droidkaigi2023.architecture.toSecret
 import com.yukihiro.droidkaigi2023.domain.model.Account
 import com.yukihiro.droidkaigi2023.domain.model.AccountId
 import com.yukihiro.droidkaigi2023.domain.model.User
@@ -14,7 +13,7 @@ object AccountMapper {
             id = UserId(response.user.id),
             name = response.user.name
         ),
-        email = response.email.toSecret(),
-        password = response.password.toSecret()
+        email = response.email,
+        password = response.password
     )
 }

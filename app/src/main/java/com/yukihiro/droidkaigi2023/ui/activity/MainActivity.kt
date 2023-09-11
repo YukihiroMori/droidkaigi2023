@@ -22,7 +22,7 @@ import com.yukihiro.droidkaigi2023.ui.common.navigation.LocalNavigationDispatche
 import com.yukihiro.droidkaigi2023.ui.maintenance.MaintenanceDestination
 import com.yukihiro.droidkaigi2023.ui.maintenance.MaintenancePage
 import com.yukihiro.droidkaigi2023.ui.itemlist.compose.ItemListPage
-import com.yukihiro.droidkaigi2023.ui.itemlist.compose.ItemListPageDestination
+import com.yukihiro.droidkaigi2023.ui.itemlist.compose.ItemListDestination
 import com.yukihiro.droidkaigi2023.ui.theme.Droidkaigi2023Theme
 import com.yukihiro.droidkaigi2023.ui.login.compose.LoginDestination
 import com.yukihiro.droidkaigi2023.ui.login.compose.LoginPage
@@ -38,7 +38,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
     Droidkaigi2023Theme {
@@ -46,37 +45,21 @@ fun MainScreen() {
         CompositionLocalProvider(
             LocalNavigationDispatcher provides MainNavigationDispatcher(navController)
         ) {
-            val hostState = remember { SnackbarHostState() }
-            CompositionLocalProvider(
-                LocalSnackBarHostState provides hostState
+            NavHost(
+                navController = navController,
+                startDestination = LoginDestination.route,
             ) {
-                Scaffold(
-                    snackbarHost = { SnackbarHost(hostState) },
-                    content = { padding ->
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(padding),
-                        ) {
-                            NavHost(
-                                navController = navController,
-                                startDestination = LoginDestination.route,
-                            ) {
-                                composable(route = LoginDestination.route) {
-                                    LoginPage()
-                                }
+                composable(route = LoginDestination.route) {
+                    LoginPage()
+                }
 
-                                composable(route = ItemListPageDestination.route) {
-                                    ItemListPage()
-                                }
+                composable(route = ItemListDestination.route) {
+                    ItemListPage()
+                }
 
-                                composable(route = MaintenanceDestination.route) {
-                                    MaintenancePage()
-                                }
-                            }
-                        }
-                    }
-                )
+                composable(route = MaintenanceDestination.route) {
+                    MaintenancePage()
+                }
             }
         }
     }
